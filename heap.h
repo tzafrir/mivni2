@@ -8,9 +8,10 @@ enum heapResult{
 	Failure
 };
 
-template <typename T, int max, bool deleteItems>
+
 class heap {
-	T tree[max];
+	int* tree;
+	int max;
 	int num_items;
 private:
 	int father(int n);
@@ -24,15 +25,14 @@ private:
 	void siftDown(int n);
 	void postOrderSiftDown(int n);
 	
-	
-	static const int Invalid = -1;
-	
 public:
-	heap() : num_items(0) {}
-	heapResult makeHeap(T* input_array, int size);
-	heapResult insert(T new_item);
+	heap(int max) : num_items(0), max(max) {
+		tree = new int[max];
+	}
+	heapResult makeHeap(int* input_array, int size);
+	heapResult insert(int new_item);
 	heapResult delMax();
-	T* findMax();
+	heapResult findMax(int* output);
 	
 	void print(int n){
 		for (int i=0, j=0, k=1;i<n;i++) {
@@ -49,41 +49,32 @@ public:
 };
 
 
-
-
-template <typename T, int max, bool deleteItems>
-int heap<T, max, deleteItems>::father(int n) {
+int heap::father(int n) {
 	return (((n+1) / 2) - 1);
 }
-template <typename T, int max, bool deleteItems>
-int heap<T, max, deleteItems>::left(int n) {
+int heap::left(int n) {
 	return 2*(n+1) - 1;
 }
-template <typename T, int max, bool deleteItems>
-int heap<T, max, deleteItems>::right(int n) {
+int heap::right(int n) {
 	return (2*(n+1)); // +1-1 
 }
-template <typename T, int max, bool deleteItems>
-void heap<T, max, deleteItems>::swap(int n1, int n2) {
-	T tmp = tree[n1];
+void heap::swap(int n1, int n2) {
+	int tmp = tree[n1];
 	tree[n1] = tree[n2];
 	tree[n2] = tmp;
 }
-template <typename T, int max, bool deleteItems>
-int heap<T, max, deleteItems>::maxChild(int n) {
+int heap::maxChild(int n) {
 	return (tree[left(n)] <= tree[right(n)] ? right(n) : left(n));
 }
 
-template <typename T, int max, bool deleteItems>
-void heap<T, max, deleteItems>::siftUp(int n) {
+void heap::siftUp(int n) {
 	while ((n != 0) && (tree[father(n)] <= tree[n])) {
 					// Used only for insert(), so stop when found proper place
 		swap(father(n), n);
 		n = father(n);
 	}
 }
-template <typename T, int max, bool deleteItems>
-void heap<T, max, deleteItems>::siftDown(int n) {
+void heap::siftDown(int n) {
 	if (left(n) >= num_items) {
 		return;
 	}
@@ -103,8 +94,7 @@ void heap<T, max, deleteItems>::siftDown(int n) {
 	siftDown(maxChildIndex);
 }
 
-template <typename T, int max, bool deleteItems>
-void heap<T, max, deleteItems>::postOrderSiftDown(int n) {
+void heap::postOrderSiftDown(int n) {
 	if (n >= num_items) {
 		return;
 	}
@@ -113,8 +103,7 @@ void heap<T, max, deleteItems>::postOrderSiftDown(int n) {
 	siftDown(n);
 }
 
-template <typename T, int max, bool deleteItems>
-heapResult heap<T, max, deleteItems>::makeHeap(T* input_array, int size) {
+heapResult heap::makeHeap(int* input_array, int size) {
 	if (size > max) {
 		return Failure;
 	}
@@ -129,8 +118,7 @@ heapResult heap<T, max, deleteItems>::makeHeap(T* input_array, int size) {
 	return Success;
 }
 
-template <typename T, int max, bool deleteItems>
-heapResult heap<T, max, deleteItems>::insert(T new_item) {
+heapResult heap::insert(int new_item) {
 	if (num_items == max) {
 		return Failure;
 	}
@@ -140,26 +128,22 @@ heapResult heap<T, max, deleteItems>::insert(T new_item) {
 	return Success;
 }
 
-template <typename T, int max, bool deleteItems>
-heapResult heap<T, max, deleteItems>::delMax() {
+heapResult heap::delMax() {
 	if (num_items == 0) {
 		return Failure;
 	}
 	swap(0, num_items - 1);
-	if (deleteItems) {
-		delete tree[num_items - 1];
-	}
 	num_items--;
 	siftDown(0);
 	return Success;
 }
 
-template <typename T, int max, bool deleteItems	>
-T* heap<T, max, deleteItems>::findMax() {
-	if (num_items == 0) {
-		return NULL;
+
+heapResult heap::findMax(int* output) {
+	if ((output == NULL) || (num_items == 0)) {
+		return Failure;
 	}
-	return &tree[0];
+	*output = tree[0];
 }
 
 #endif /* __HEAP_H__ */
