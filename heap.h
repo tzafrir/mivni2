@@ -53,9 +53,6 @@ public:
 
 template <typename T, int max, bool deleteItems>
 int heap<T, max, deleteItems>::father(int n) {
-	if (n == 1) {
-		return Invalid;
-	}
 	return (((n+1) / 2) - 1);
 }
 template <typename T, int max, bool deleteItems>
@@ -140,6 +137,7 @@ heapResult heap<T, max, deleteItems>::insert(T new_item) {
 	tree[num_items] = new_item;
 	siftUp(num_items);
 	num_items++;
+	return Success;
 }
 
 template <typename T, int max, bool deleteItems>
