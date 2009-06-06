@@ -9,9 +9,12 @@ int main() {
 	for (int i=0;i<50000;i++) {
 		input[i] = rand() % 100000;
 	}
+	std::cout << mheap._num_items() << " ";
 	mheap.makeHeap(input, 50000);
+	std::cout << mheap._num_items() << " ";
 	for (int i=0; i<50000;i++) {
 		mheap.insert(rand() % 100000);
+		std::cout << mheap._num_items() << " ";
 	}
 	int a;
 	mheap.findMax(&a);
