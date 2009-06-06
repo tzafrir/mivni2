@@ -12,10 +12,7 @@ enum heapResult{
 class heap {
 	int* tree;
 	int max;
-public:
 	int num_items;
-	
-	
 private:
 	int father(int n);
 	int left(int n);
@@ -31,9 +28,6 @@ private:
 public:
 	heap(int max) : num_items(0), max(max) {
 		tree = new int[max];
-	}
-	~heap() {
-		delete[] tree;
 	}
 	heapResult makeHeap(int* input_array, int size);
 	heapResult insert(int new_item);
