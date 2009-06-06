@@ -35,6 +35,7 @@ public:
 	heapResult findMax(int* output);
 	
 	const int _num_items();
+	int* heap_array();
 	
 	void print(int n){ // TODO: remove
 		for (int i=0, j=0, k=1;i<n;i++) {

@@ -11,11 +11,12 @@ int main() {
 	}
 	std::cout << mheap._num_items() << " ";
 	mheap.makeHeap(input, 50000);
+	std::cout << mheap.heap_array()[0] << " ";
 	std::cout << mheap._num_items() << " ";
 	for (int i=0; i<50000;i++) {
 		mheap.insert(rand() % 100000);
-		std::cout << mheap._num_items() << " ";
 	}
+	std::cout << mheap._num_items() << " ";
 	int a;
 	mheap.findMax(&a);
 	int b;
@@ -23,7 +24,7 @@ int main() {
 		mheap.findMax(&b);
 		assert(b <= a);
 		mheap.delMax();
-		std::cout << a << " ";
+		std::cout << a << "\n";
 		a=b;
 	}
 	return 0;

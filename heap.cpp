@@ -110,3 +110,7 @@ heapResult heap::findMax(int* output) {
 const int heap::_num_items() {
 	return num_items;
 }
+
+int* heap::heap_array() {
+	return tree;
+}
