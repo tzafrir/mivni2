@@ -7,9 +7,6 @@
  *
  */
 
-#include "library2.h"
-#include "avl.h"
-
 class Town {
 public:
 	Town(int RLocation,int MaxNeighborhoods)  : Location(RLocation), Neighborhoods(0)
@@ -22,6 +19,11 @@ public:
 	bool operator<=(const Town& X) const
 	{
 		return Location <= X.Location;
+	}
+
+	int AValue()
+	{
+		return -1;
 	}
 private:
 	Town (const Town&);

@@ -1,0 +1,19 @@
+Init done.
+AddTown: Invalid_input
+AddTown: Success
+MonsterAttack: Failure
+AddManyNeighborhoods: Success
+MonsterAttack: Failure
+ChangeMa: Success
+MonsterAttack: Success 2
+AddManyNeighborhoods: Success
+AddNeighborhood: Failure
+AddTown: Success
+AddManyNeighborhoods: Success
+ChangeMa: Success
+MonsterAttack: Success 2
+MonsterAttack: Success 23
+ChangeMa: Success
+MonsterAttack: Success 234
+MonsterAttack: Failure
+Quit done.

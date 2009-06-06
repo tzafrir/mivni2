@@ -1,0 +1,26 @@
+Init 4
+AddTown 0 10 5
+AddManyNeighborhoods 0 10 3 10 5 60
+AddTown 1 30 10
+AddNeighborhood 1 30 100
+AddBorder 10 20
+AddRoad 10 30
+ChangeMa 1
+MonsterAttack 1 30
+MonsterAttack 0 10
+AddBorder 20 40
+AddTown 1 20 30
+AddRoad 10 20
+AddManyNeighborhoods 1 20 10 40 21 4 20 44 58 3 23 54 2
+MonsterAttack 1 20
+AddRoad 10 20
+RemoveRoad 10 20
+AddBorder 15 15
+ChangeMa 5
+MonsterAttack 1 20
+AddRoad 10 20
+RemoveBorder 15 15
+AddRoad 10 20
+MonsterAttack 1 30
+Quit
+ 

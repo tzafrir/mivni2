@@ -1,0 +1,15 @@
+Init done.
+AddTown: Success
+AddNeighborhood: Success
+AddNeighborhood: Success
+AddManyNeighborhoods: Success
+MonsterAttack: Success 40
+MonsterAttack: Success 60
+MonsterAttack: Success 70
+MonsterAttack: Failure
+AddManyNeighborhoods: Success
+ChangeMa: Success
+MonsterAttack: Success 10
+MonsterAttack: Success 10
+MonsterAttack: Success 30
+Quit done.

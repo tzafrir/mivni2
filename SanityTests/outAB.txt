@@ -1,0 +1,25 @@
+Init done.
+AddTown: Success
+AddManyNeighborhoods: Success
+AddTown: Success
+AddNeighborhood: Success
+AddBorder: Failure
+AddRoad: Success
+ChangeMa: Success
+MonsterAttack: Success 100
+MonsterAttack: Success 5
+AddBorder: Success
+AddTown: Success
+AddRoad: Success
+AddManyNeighborhoods: Success
+MonsterAttack: Success 2
+AddRoad: Failure
+RemoveRoad: Success
+AddBorder: Failure
+ChangeMa: Success
+MonsterAttack: Success 23
+AddRoad: Success
+RemoveBorder: Failure
+AddRoad: Failure
+MonsterAttack: Failure
+Quit done.

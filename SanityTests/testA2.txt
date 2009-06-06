@@ -1,0 +1,12 @@
+Init 1
+AddTown 0 10 1
+AddTown 1 20 1
+AddRoad 10 20
+AddBorder 15 15
+RemoveRoad 10 20
+AddBorder 15 15
+AddRoad 10 20
+RemoveBorder 15 15
+AddRoad 10 20
+Quit
+

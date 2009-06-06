@@ -6,7 +6,6 @@
  *	Maxavl.h
  *
  */
-
 #include <iostream>
 
 template <typename T>
@@ -33,6 +32,7 @@ public:
 	void DestroyTree(bool FreeItems)
 	{
 		Destroy(root,FreeItems);
+		root = NULL;
 	}
 /*
 	void print_tree(System::Drawing::Graphics^ G)
@@ -199,16 +199,16 @@ public:
 
 
 private:
-	MAXAVL(MAXAVL& T) {}; //no copying of tree is allowed
+	MAXAVL(const MAXAVL&) {}; //no copying of tree is allowed
 	static const int NumberOfChildren = 2;
 
 	 // internal class - not needed for usage of Tree
 	class node
 	{
 	public:
-		node(T *newdata) : data(newdata), bf(0),Max(-1),Min(-1)
+		node(T *newdata) : data(newdata),Max(-1),Min(-1),bf(0)
 		{
-			Min = Max = newdata->Location[SOUTH];
+			Min = Max = newdata->AValue();
 			Children[Left]=Children[Right] = NULL;
 		}
 		T *data;
@@ -266,7 +266,7 @@ private:
 
 	static void UpdateMinMax(node* root)
 	{
-		root->Min = root->Max = root->data->Location[SOUTH];
+		root->Min = root->Max = root->data->AValue();
 		for (int dir = Left; dir <= Right; dir++)
 		{
 		
@@ -506,14 +506,14 @@ private:
 		while  (root != NULL)
 		{
 			CmpResult res= Cmp(root->data,item);
-			if (res != Dir)
+			if (res != (CmpResult)Dir)
 			{
 				
-				rMax = myMax = Max(Max(myMax,root->data->Location[SOUTH]),GetMax(root->Children[Dir]));
-				rMin = myMin = Min(Min(myMin,root->data->Location[SOUTH]),GetMin(root->Children[Dir]));
+				rMax = myMax = Max(Max(myMax,root->data->AValue()),GetMax(root->Children[Dir]));
+				rMin = myMin = Min(Min(myMin,root->data->AValue()),GetMin(root->Children[Dir]));
 				
 				T* InSubTree = Closest(root->Children[OtherDirection(Dir)],item,Dir,rMin,rMax);
-				if (InSubTree == NULL || Cmp(InSubTree,root->data)!=Dir) 
+				if (InSubTree == NULL || Cmp(InSubTree,root->data)!=(CmpResult)Dir) 
 				{
 					rMax = myMax;
 					rMin = myMin;
@@ -551,8 +551,8 @@ private:
 	{
 		if (root != NULL)
 		{
-			Destroy(root->Children[Left]);
-			Destroy(root->Children[Right]);
+			Destroy(root->Children[Left],FreeItems);
+			Destroy(root->Children[Right],FreeItems);
 			if (FreeItems)
 			{
 				delete root->data;

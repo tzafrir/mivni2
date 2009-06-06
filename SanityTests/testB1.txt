@@ -1,0 +1,16 @@
+Init 3
+AddTown 0 10 5
+AddNeighborhood 0 10 30
+AddNeighborhood 0 10 40
+AddManyNeighborhoods 0 10 3 10 60 70
+MonsterAttack 0 10
+MonsterAttack 0 10
+MonsterAttack 0 10
+MonsterAttack 0 10
+AddManyNeighborhoods 0 10 2 50 10
+ChangeMa 1
+MonsterAttack 0 10
+MonsterAttack 0 10 
+MonsterAttack 0 10
+Quit
+ 

@@ -18,11 +18,14 @@ StatusType  RectangleLand::AddTown(Shore side, int location, int maxNeighborhood
 		Town* T = NULL;
 		try
 		{
+			int min,max;
+			//make sure we dont have a border in that location
 			Edge b(location,-1);
-			Edge* ClosestBorder = Borders.findClosest(&b,Borders.Above);
-			if (ClosestBorder == NULL || ClosestBorder->Location[index] != location)
+			Edge* ClosestBorder = Borders[index].findClosest(&b,Borders[index].Above,min,max);
+			if (ClosestBorder == NULL || ClosestBorder->Location[NORTH] != location) 
+				//the location in the border is always north, no matter what the index is
 			{
-				//make sure we dont have a border in that location
+				
 				T =  new Town(location,maxNeighborhoods);
 				if (Shores[index].insert(T) == Shores[index].Success)
 					return SUCCESS;
@@ -54,11 +57,12 @@ StatusType  RectangleLand::AddRoad(int northTown, int southTown)
 		try
 		{
 			Road = new Edge(northTown,southTown);
+			int min,max;
 			//make sure there is no intersection with a border
-			Edge* Border = Borders.findClosest(Road,Borders.Bellow);
+			Edge* Border = Borders[NORTH].findClosest(Road,Borders[NORTH].Bellow,min,max);
 			if (Border == NULL || Road->Location[SOUTH] > Border->Location[SOUTH])
 			{
-				Border = Borders.findClosest(Road,Borders.Above);
+				Border = Borders[NORTH].findClosest(Road,Borders[NORTH].Above,min,max);
 				if (Border == NULL || Road->Location[SOUTH] < Border->Location[SOUTH])
 				{
 					if (Roads.insert(Road) == Roads.Success)
@@ -103,22 +107,28 @@ StatusType RectangleLand::AddBorder(int northPt, int southPt)
 	{
 		NewBorder = new Edge(northPt,southPt);
 		//make sure there is no intersection with a border
-		Edge* Border = Borders.findClosest(NewBorder,Borders.Bellow);
+		int min,max;
+		Edge* Border = Borders[NORTH].findClosest(NewBorder,Borders[NORTH].Bellow,min,max);
 		if (Border == NULL || NewBorder->Location[SOUTH] > Border->Location[SOUTH])
 		{
-			Border = Borders.findClosest(NewBorder,Borders.Above);
+			Border = Borders[NORTH].findClosest(NewBorder,Borders[NORTH].Above,min,max);
 			if (Border == NULL || NewBorder->Location[SOUTH] < Border->Location[SOUTH])
 			{
-				int min,max;
+				
 				Edge* Road = Roads.findClosest(NewBorder,Roads.Bellow,min,max);
 				if (Road == NULL || NewBorder->Location[SOUTH] > max)
 				{
 					Road = Roads.findClosest(NewBorder,Roads.Above,min,max);
 					if (Road == NULL || NewBorder->Location[SOUTH] < min)
 					{
-						if (Borders.insert(NewBorder) == Borders.Success)
+						if (Borders[NORTH].insert(NewBorder) == Borders[NORTH].Success)
 						{
-							return SUCCESS;
+							NewBorder = NULL; //dont free old border in case allocation fails...
+							NewBorder = new Edge(southPt, northPt); //reverse order
+							if (Borders[SOUTH].insert(NewBorder) == Borders[SOUTH].Success)
+							{
+								return SUCCESS;
+							}
 						}
 					}
 				}
@@ -134,20 +144,22 @@ StatusType RectangleLand::AddBorder(int northPt, int southPt)
 	return FAILURE;
 }
 
-void main()
+StatusType  RectangleLand::RemoveBorder(int northPt, int southPt)
 {
-	
-	RectangleLand test(5);
-	test.AddTown(NORTH,1,4);
-
-	test.AddTown(NORTH,3,4);
-
-	test.AddTown(SOUTH,2,4);
-
-	test.AddRoad(3,2);
-
-	test.AddRoad(4,8);
-	test.AddBorder(1,4);
-	test.AddBorder(2,1);
-
+	if (northPt < 0 || southPt < 0)
+		return INVALID_INPUT;
+	//else
+	Edge SBorder(northPt,southPt);
+	Edge* Border = Borders[NORTH].remove(&SBorder);
+	if (Border != NULL)
+	{
+		delete(Border);
+		SBorder.Location[NORTH] = southPt; //reverse order
+		SBorder.Location[SOUTH] = northPt;
+		Border = Borders[SOUTH].remove(&SBorder);
+		delete(Border);
+		return SUCCESS;
+	}
+	//else
+	return FAILURE;
 }
