@@ -30,6 +30,11 @@ public:
 		return Location[FirstShore] <= X.Location[FirstShore];
 	}
 
+	int AValue()
+	{
+		return Location[SecondShore];
+	}
+
 private:
 	Edge (const Edge&);
 };

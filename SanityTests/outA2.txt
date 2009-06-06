@@ -1,0 +1,11 @@
+Init done.
+AddTown: Success
+AddTown: Success
+AddRoad: Success
+AddBorder: Failure
+RemoveRoad: Success
+AddBorder: Success
+AddRoad: Failure
+RemoveBorder: Success
+AddRoad: Success
+Quit done.
