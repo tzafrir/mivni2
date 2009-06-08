@@ -37,8 +37,8 @@ public:
 	StatusType  RemoveRoad(int northTown, int southTown);
 	StatusType  AddBorder(int northPt, int southPt);
 	StatusType  RemoveBorder(int northPt, int southPt);
-	StatusType  AddNeighborhood(Shore side, int location, int population) {return FAILURE;}
-	StatusType  AddManyNeighborhoods(Shore side, int location, int size, const int* populations) {return FAILURE;}
+	StatusType  AddNeighborhood(Shore side, int location, int population);
+	StatusType  AddManyNeighborhoods(Shore side, int location, int size, const int* populations);
 	StatusType  MonsterAttack(Shore side, int location, int* population) {return FAILURE;}
 	StatusType  ChangeMa(int ma) {return FAILURE;}
 };

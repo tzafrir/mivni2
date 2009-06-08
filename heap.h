@@ -29,10 +29,12 @@ private:
 public:
 	heap(int max);
 	~heap();
-	heapResult makeHeap(int* input_array, int size);
+	heapResult makeHeap(const int* const input_array, int size);
 	heapResult insert(int new_item);
 	heapResult delMax();
 	heapResult findMax(int* output);
+	
+	void reset();
 	
 	const int _num_items();
 	int* heap_array();

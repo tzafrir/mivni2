@@ -26,7 +26,7 @@ StatusType  RectangleLand::AddTown(Shore side, int location, int maxNeighborhood
 				//the location in the border is always north, no matter what the index is
 			{
 				
-				T =  new Town(location,maxNeighborhoods);
+				T =  new Town(location,maxNeighborhoods,ma);
 				if (Shores[index].insert(T) == Shores[index].Success)
 					return SUCCESS;
 			}
@@ -48,8 +48,8 @@ StatusType  RectangleLand::AddRoad(int northTown, int southTown)
 	
 
 	//first make sure both towns exist
-	Town SnorthTown(northTown,-1);
-	Town SsouthTown(southTown,-1);
+	Town SnorthTown(northTown,0, ma);
+	Town SsouthTown(southTown,0, ma);
 
 	if (Shores[NORTH].find(&SnorthTown) != NULL && Shores[SOUTH].find(&SsouthTown) != NULL)
 	{
@@ -163,3 +163,34 @@ StatusType  RectangleLand::RemoveBorder(int northPt, int southPt)
 	//else
 	return FAILURE;
 }
+
+StatusType RectangleLand::AddNeighborhood(Shore side, int location, int population){
+	if ( (location < 0) || (population <= 0) ) {
+		return INVALID_INPUT;
+	}
+	Town tmp(location, 0, ma);
+	Town* T = Shores[side].find(&tmp);
+	if (T == NULL) {
+		return FAILURE;
+	}
+	if (T->AddNeighborhood(population) == T->TownSuccess) {
+		return SUCCESS;
+	}
+	return FAILURE;
+}
+
+StatusType RectangleLand::AddManyNeighborhoods(Shore side, int location, int size, const int* populations){
+	if ( (size <= 0) || (location < 0) || (populations == NULL) ) {
+		return INVALID_INPUT;
+	}
+	Town tmp(location, 0, ma);
+	Town* T = Shores[side].find(&tmp);
+	if (T == NULL) {
+		return FAILURE;
+	}
+	if (T->AddManyNeighborhoods(size, populations) == T->TownFailure) {
+		return FAILURE;
+	}
+	return SUCCESS;
+}
+

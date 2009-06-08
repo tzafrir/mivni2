@@ -64,7 +64,7 @@ void heap::postOrderSiftDown(int n) {
 	siftDown(n);
 }
 
-heapResult heap::makeHeap(int* input_array, int size) {
+heapResult heap::makeHeap(const int* const input_array, int size) {
 	if (size > max) {
 		return Failure;
 	}
@@ -105,6 +105,10 @@ heapResult heap::findMax(int* output) {
 		return Failure;
 	}
 	*output = tree[0];
+}
+
+void heap::reset() {
+	num_items = 0;
 }
 
 const int heap::_num_items() {
