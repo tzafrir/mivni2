@@ -100,6 +100,10 @@ Town::TownResult Town::MonsterAttack(int* population) {
 }
 
 Town::TownResult Town::ChangeMa(int ma) {
+	if (Neighborhoods == 0) {
+		this->ma = ma;
+		return TownSuccess;
+	}
 	int* tmp = new int[Neighborhoods];
 	for (int i=0;i<Neighborhoods;i++) {
 		if (i < this->ma) {
