@@ -48,8 +48,8 @@ StatusType  RectangleLand::AddRoad(int northTown, int southTown)
 	
 
 	//first make sure both towns exist
-	Town SnorthTown(northTown,0, ma);
-	Town SsouthTown(southTown,0, ma);
+	Town SnorthTown(northTown);
+	Town SsouthTown(southTown);
 
 	if (Shores[NORTH].find(&SnorthTown) != NULL && Shores[SOUTH].find(&SsouthTown) != NULL)
 	{
@@ -105,6 +105,13 @@ StatusType RectangleLand::AddBorder(int northPt, int southPt)
 	Edge* NewBorder = NULL;
 	try
 	{
+		//make sure there isnt any tonw in those locations
+		Town northTown(northPt);
+		Town southTown(southPt);
+		if (Shores[NORTH].find(&northTown) != NULL || Shores[SOUTH].find(&southTown) != NULL)
+		{
+			return FAILURE;
+		}
 		NewBorder = new Edge(northPt,southPt);
 		//make sure there is no intersection with a border
 		int min,max;
@@ -114,7 +121,6 @@ StatusType RectangleLand::AddBorder(int northPt, int southPt)
 			Border = Borders[NORTH].findClosest(NewBorder,Borders[NORTH].Above,min,max);
 			if (Border == NULL || NewBorder->Location[SOUTH] < Border->Location[SOUTH])
 			{
-				
 				Edge* Road = Roads.findClosest(NewBorder,Roads.Bellow,min,max);
 				if (Road == NULL || NewBorder->Location[SOUTH] > max)
 				{
@@ -183,7 +189,7 @@ StatusType RectangleLand::AddManyNeighborhoods(Shore side, int location, int siz
 	if ( (size <= 0) || (location < 0) || (populations == NULL) ) {
 		return INVALID_INPUT;
 	}
-	Town tmp(location, 0, ma);
+	Town tmp(location);
 	Town* T = Shores[side].find(&tmp);
 	if (T == NULL) {
 		return FAILURE;
@@ -198,7 +204,7 @@ StatusType RectangleLand::MonsterAttack(Shore side, int location, int* populatio
 	if ( (location < 0) || (population == NULL) ) {
 		return INVALID_INPUT;
 	}
-	Town tmp(location, 0, ma);
+	Town tmp(location);
 	Town* T = Shores[side].find(&tmp);
 	if (T == NULL) {
 		return FAILURE;
