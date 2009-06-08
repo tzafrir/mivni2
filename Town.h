@@ -12,14 +12,14 @@
 class Town {
 	int maxNeighborhoods;
 	int ma;
-	heap NeighborhoodsBottom;
-	heap NeighborhoodsTop;
+	heap* NeighborhoodsBottom;
+	heap* NeighborhoodsTop;
 public:
 	Town(int RLocation,int maxNeighborhoods, int ma)  : 
-		Location(RLocation), Neighborhoods(0), maxNeighborhoods(maxNeighborhoods), ma(ma),
-	
-		NeighborhoodsBottom(ma),
-		NeighborhoodsTop(maxNeighborhoods) {}
+		Location(RLocation), Neighborhoods(0), maxNeighborhoods(maxNeighborhoods), ma(ma) {
+			NeighborhoodsBottom = new heap(ma);
+			NeighborhoodsTop = new heap(maxNeighborhoods);
+	}
 	int Location;
 	int Neighborhoods;
 
@@ -36,6 +36,8 @@ public:
 	enum TownResult { TownSuccess, TownFailure } ;
 	TownResult AddNeighborhood(int population);
 	TownResult AddManyNeighborhoods(int size, const int* populations);
+	TownResult MonsterAttack(int* population);
+	TownResult ChangeMa(int ma);
 private:
 	Town (const Town&);
 };

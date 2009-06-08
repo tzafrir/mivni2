@@ -12,14 +12,14 @@ Town::TownResult Town::AddNeighborhood(int population) {
 		return TownFailure;
 	}
 	if (Neighborhoods < ma) {
-		if (NeighborhoodsBottom.insert(population) == NeighborhoodsBottom.Failure) {
+		if (NeighborhoodsBottom->insert(population) == NeighborhoodsBottom->Failure) {
 			return TownFailure;
 		}
 		Neighborhoods++;
 		return TownSuccess;
 	}
 							// Maximum heap of negatives := minimum heap
-	if (NeighborhoodsTop.insert(-1 * population) == NeighborhoodsTop.Failure) { 
+	if (NeighborhoodsTop->insert(-1 * population) == NeighborhoodsTop->Failure) { 
 		return TownFailure;
 	}
 	Neighborhoods++;
@@ -33,9 +33,9 @@ Town::TownResult Town::AddManyNeighborhoods(int size, const int* populations) {
 	int* tmp = new int[Neighborhoods + size];
 	for (int i=0; i<Neighborhoods; i++) {
 		if (i <= ma) {
-			tmp[i] = NeighborhoodsBottom.heap_array()[i];
+			tmp[i] = NeighborhoodsBottom->heap_array()[i];
 		} else {
-			tmp[i] = NeighborhoodsTop.heap_array()[i-ma] * -1;
+			tmp[i] = NeighborhoodsTop->heap_array()[i-ma] * -1;
 		}
 	}
 	for (int i=0; i < size; i++) {
@@ -47,16 +47,16 @@ Town::TownResult Town::AddManyNeighborhoods(int size, const int* populations) {
 												// those before it are smaller than it.
 												// This works also when ma is larger
 												// than the size of the array.
-	NeighborhoodsBottom.reset();
-	NeighborhoodsTop.reset();
+	NeighborhoodsBottom->reset();
+	NeighborhoodsTop->reset();
 	
 	if (Neighborhoods + size <= ma) {
-		if (NeighborhoodsBottom.makeHeap(tmp, Neighborhoods+size) == NeighborhoodsBottom.Failure) {
+		if (NeighborhoodsBottom->makeHeap(tmp, Neighborhoods+size) == NeighborhoodsBottom->Failure) {
 			delete[] tmp;
 			return TownFailure;
 		}
 	} else {
-		if (NeighborhoodsBottom.makeHeap(tmp, ma) == NeighborhoodsBottom.Failure) {
+		if (NeighborhoodsBottom->makeHeap(tmp, ma) == NeighborhoodsBottom->Failure) {
 			delete[] tmp;
 			return TownFailure;
 		}
@@ -64,8 +64,8 @@ Town::TownResult Town::AddManyNeighborhoods(int size, const int* populations) {
 			tmp[i] *= -1;
 		}
 
-		if (NeighborhoodsTop.makeHeap(&tmp[ma], Neighborhoods + size - ma)
-				== NeighborhoodsTop.Failure) {
+		if (NeighborhoodsTop->makeHeap(&tmp[ma], Neighborhoods + size - ma)
+				== NeighborhoodsTop->Failure) {
 			delete[] tmp;
 			return TownFailure;
 		}
@@ -74,3 +74,25 @@ Town::TownResult Town::AddManyNeighborhoods(int size, const int* populations) {
 	Neighborhoods += size;
 	return TownSuccess;
 }
+
+Town::TownResult Town::MonsterAttack(int* population) {
+	if (Neighborhoods < ma) {
+		return TownFailure;
+	}
+	if (NeighborhoodsBottom->findMax(population) == NeighborhoodsBottom->Failure) {
+		return TownFailure;
+	}
+	if (Neighborhoods == ma) {
+		NeighborhoodsBottom->delMax();
+	} else {
+		int tmp;
+		if (NeighborhoodsTop->findMax(&tmp) == NeighborhoodsTop->Failure) {
+			return TownFailure;
+		}
+		NeighborhoodsBottom->heap_array()[0] = tmp * -1; // Hack
+		NeighborhoodsTop->delMax();
+	}
+	Neighborhoods--;
+	return TownSuccess;
+}
+
