@@ -3,12 +3,6 @@
 
 #include <iostream>
 
-enum heapResult{
-	Success,
-	Failure
-};
-
-
 class heap {
 	int* tree;
 	int max;
@@ -29,6 +23,10 @@ private:
 public:
 	heap(int max);
 	~heap();
+	enum heapResult{
+		Success,
+		Failure
+	};
 	heapResult makeHeap(const int* const input_array, int size);
 	heapResult insert(int new_item);
 	heapResult delMax();

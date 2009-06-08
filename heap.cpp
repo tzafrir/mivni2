@@ -64,7 +64,7 @@ void heap::postOrderSiftDown(int n) {
 	siftDown(n);
 }
 
-heapResult heap::makeHeap(const int* const input_array, int size) {
+heap::heapResult heap::makeHeap(const int* const input_array, int size) {
 	if (size > max) {
 		return Failure;
 	}
@@ -79,7 +79,7 @@ heapResult heap::makeHeap(const int* const input_array, int size) {
 	return Success;
 }
 
-heapResult heap::insert(int new_item) {
+heap::heapResult heap::insert(int new_item) {
 	if (num_items == max) {
 		return Failure;
 	}
@@ -89,7 +89,7 @@ heapResult heap::insert(int new_item) {
 	return Success;
 }
 
-heapResult heap::delMax() {
+heap::heapResult heap::delMax() {
 	if (num_items == 0) {
 		return Failure;
 	}
@@ -100,7 +100,7 @@ heapResult heap::delMax() {
 }
 
 
-heapResult heap::findMax(int* output) {
+heap::heapResult heap::findMax(int* output) {
 	if ((output == NULL) || (num_items == 0)) {
 		return Failure;
 	}
