@@ -94,16 +94,16 @@ class Select {
 		int x = median_of_medians(A, first, last);
 		//cout << "pivot = " << x << "\n";
 		int s = partition(A, first, last, x);
-		if ((last - s) >= i) {
-			return select(A, s+1, last, i);
+		if ((s - first) >= i) {
+			return select(A, first, s-1, i);
 		}
-		if ((last - s) == 0) { // TODO: private case, or can be generalized?
+		if ((s - first) == 0) { // TODO: private case, or can be generalized?
 			if (i == 1) {
-				return A[last];
+				return A[first];
 			}
-			return select(A, first, s-1, i-1);
+			return select(A, first+1, last, i-1);
 		}
-		return select(A, first, s, i - (last - s) );
+		return select(A, s, last, i - (s - first) );
 	}
 };
 #endif // _SELECT_H
