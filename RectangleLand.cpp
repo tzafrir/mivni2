@@ -174,7 +174,7 @@ StatusType RectangleLand::AddNeighborhood(Shore side, int location, int populati
 	if ( (location < 0) || (population <= 0) ) {
 		return INVALID_INPUT;
 	}
-	Town tmp(location, 0, ma);
+	Town tmp(location);
 	Town* T = Shores[side].find(&tmp);
 	if (T == NULL) {
 		return FAILURE;
