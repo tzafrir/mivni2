@@ -89,14 +89,13 @@ heap::heapResult heap::insert(int new_item) {
 	return Success;
 }
 
-heap::heapResult heap::delMax() {
+void heap::delMax() {
 	if (num_items == 0) {
-		return Failure;
+		return;
 	}
 	swap(0, num_items - 1);
 	num_items--;
 	siftDown(0);
-	return Success;
 }
 
 

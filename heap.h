@@ -29,7 +29,7 @@ public:
 	};
 	heapResult makeHeap(const int* const input_array, int size);
 	heapResult insert(int new_item);
-	heapResult delMax();
+	void delMax();
 	heapResult findMax(int* output);
 	
 	void reset();
