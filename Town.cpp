@@ -6,6 +6,8 @@
 #include "Town.h"
 #include "heap.h"
 #include "select.h"
+#include <assert.h>
+
 
 Town::TownResult Town::AddNeighborhood(int population) {
 	if (Neighborhoods == maxNeighborhoods) {
@@ -30,9 +32,10 @@ Town::TownResult Town::AddManyNeighborhoods(int size, const int* populations) {
 	if (Neighborhoods + size > maxNeighborhoods) {
 		return TownFailure;
 	}
+
 	int* tmp = new int[Neighborhoods + size];
 	for (int i=0; i<Neighborhoods; i++) {
-		if (i <= ma) {
+		if (i < ma) {
 			tmp[i] = NeighborhoodsBottom->heap_array()[i];
 		} else {
 			tmp[i] = NeighborhoodsTop->heap_array()[i-ma] * -1;
@@ -75,7 +78,7 @@ Town::TownResult Town::AddManyNeighborhoods(int size, const int* populations) {
 	return TownSuccess;
 }
 
-Town::TownResult Town::MonsterAttack(int* population) {
+Town::TownResult Town::MonsterAttack(int* population) {	
 	if (Neighborhoods < ma) {
 		return TownFailure;
 	}
@@ -95,4 +98,48 @@ Town::TownResult Town::MonsterAttack(int* population) {
 	Neighborhoods--;
 	return TownSuccess;
 }
+
+Town::TownResult Town::ChangeMa(int ma) {
+	int* tmp = new int[Neighborhoods];
+	for (int i=0;i<Neighborhoods;i++) {
+		if (i < this->ma) {
+			tmp[i] = NeighborhoodsBottom->heap_array()[i];
+		} else {
+			tmp[i] = -1 * NeighborhoodsTop->heap_array()[i - this->ma];
+		}
+	}
+	
+	this->ma = ma;
+	
+	
+	Select s;
+	s.select(tmp, 0, Neighborhoods-1, ma); // Side effect puts ma element in tmp[ma-1]
+	for (int i=ma;i<Neighborhoods;i++) {
+		tmp[i] *= -1;
+	}
+	
+	delete NeighborhoodsBottom;
+	NeighborhoodsBottom = new heap(ma);
+	if (NeighborhoodsBottom->makeHeap(tmp, (Neighborhoods >= ma ? ma : Neighborhoods))
+			== NeighborhoodsBottom->Failure) {
+		delete[] tmp;
+		return TownFailure;
+	}
+	
+
+	if (Neighborhoods > ma) {
+		delete NeighborhoodsTop;
+		NeighborhoodsTop = new heap(Neighborhoods - ma);
+		if (NeighborhoodsTop->makeHeap(&tmp[ma], Neighborhoods - ma)
+				== NeighborhoodsTop->Failure) {
+			delete[] tmp;
+			return TownFailure;		
+		}
+	} else {
+		NeighborhoodsTop->reset();
+	}
+	delete[] tmp;
+	return TownSuccess;
+}
+
 

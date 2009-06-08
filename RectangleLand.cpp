@@ -194,3 +194,33 @@ StatusType RectangleLand::AddManyNeighborhoods(Shore side, int location, int siz
 	return SUCCESS;
 }
 
+StatusType RectangleLand::MonsterAttack(Shore side, int location, int* population) {
+	if ( (location < 0) || (population == NULL) ) {
+		return INVALID_INPUT;
+	}
+	Town tmp(location, 0, ma);
+	Town* T = Shores[side].find(&tmp);
+	if (T == NULL) {
+		return FAILURE;
+	}
+	if (T->MonsterAttack(population) == T->TownFailure) {
+		return FAILURE;
+	}
+	return SUCCESS;
+}
+
+StatusType RectangleLand::ChangeMa(int ma) {
+	if (ma <= 0) {
+		return INVALID_INPUT;
+	}
+	MaChanger M(ma);
+	this->ma = ma;
+	Shores[NORTH].inorder(&M);
+	Shores[SOUTH].inorder(&M);
+	return SUCCESS;
+}
+
+bool RectangleLand::MaChanger::DoWork(Town* T) {
+	T->ChangeMa(ma);
+	return false;
+}

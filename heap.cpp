@@ -40,8 +40,6 @@ void heap::siftDown(int n) {
 		return;
 	}
 	if (right(n) >= num_items) { // only have a left child, that must be a leaf
-		int this1 = n;
-		int thisleft = left(n);
 		if (tree[n] <= tree[left(n)]) {
 			swap(n, left(n));
 		}
@@ -104,6 +102,7 @@ heap::heapResult heap::findMax(int* output) {
 		return Failure;
 	}
 	*output = tree[0];
+	return Success;
 }
 
 void heap::reset() {

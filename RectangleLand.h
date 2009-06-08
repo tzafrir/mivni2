@@ -21,7 +21,14 @@ class RectangleLand {
 	MAXAVL<Town> Shores[2];
 	MAXAVL<Edge> Borders[2]; //in Borders[SOUTH] the edges  are swithed so it will be orderd
 	//accrding to the SOUTH vertex first
-
+	
+	class MaChanger : public MAXAVL<Town>::Predicate {
+		int ma;
+		bool DoWork(Town* T);
+	public:
+		MaChanger(int ma) : ma(ma) {}
+	};
+	
 public:
 	RectangleLand(int rma) : ma(rma) {}
 	~RectangleLand()
@@ -39,8 +46,8 @@ public:
 	StatusType  RemoveBorder(int northPt, int southPt);
 	StatusType  AddNeighborhood(Shore side, int location, int population);
 	StatusType  AddManyNeighborhoods(Shore side, int location, int size, const int* populations);
-	StatusType  MonsterAttack(Shore side, int location, int* population) {return FAILURE;}
-	StatusType  ChangeMa(int ma) {return FAILURE;}
+	StatusType  MonsterAttack(Shore side, int location, int* population);
+	StatusType  ChangeMa(int ma);
 };
 
 #endif

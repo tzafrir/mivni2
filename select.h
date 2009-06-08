@@ -17,15 +17,17 @@ class Select {
 				tmp[j] = A[i];
 				j++;
 			}
-			if (A[i] == x) {
+			if ((A[i] == x) && (xi > 0)) {
 				xi = i;
 			}
 		}
-		if (xi != -1) { // x is in the subarray
-			tmp[j] = x;
-			xi = j+first;
-			j++;
+		for (int i = first; i <= last; i++) {
+			if (A[i] == x) {
+				tmp[j] = x;
+				j++;
+			}
 		}
+		xi = j + first - 1;
 		for (int i = first; i <= last; i++) {
 			if (A[i] > x) {
 				tmp[j] = A[i];
