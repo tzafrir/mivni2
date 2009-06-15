@@ -15,6 +15,8 @@
 class RectangleLand {
 	
 	int ma;
+	long AllowedBorders;
+
 
 	MAXAVL<Edge> Roads;
 
@@ -30,7 +32,7 @@ class RectangleLand {
 	};
 	
 public:
-	RectangleLand(int rma) : ma(rma) {}
+	RectangleLand(int rma) : ma(rma) , AllowedBorders(0) {}
 	~RectangleLand()
 	{
 		Borders[NORTH].DestroyTree(true);

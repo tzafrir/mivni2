@@ -28,6 +28,7 @@ StatusType  RectangleLand::AddTown(Shore side, int location, int maxNeighborhood
 				
 				T =  new Town(location,maxNeighborhoods,ma);
 				if (Shores[index].insert(T) == Shores[index].Success) {
+					AllowedBorders++;
 					return SUCCESS;
 				}
 				delete T;
@@ -135,6 +136,7 @@ StatusType RectangleLand::AddBorder(int northPt, int southPt)
 							NewBorder = new Edge(southPt, northPt); //reverse order
 							if (Borders[SOUTH].insert(NewBorder) == Borders[SOUTH].Success)
 							{
+								AllowedBorders--;
 								return SUCCESS;
 							}
 						}
@@ -166,6 +168,7 @@ StatusType  RectangleLand::RemoveBorder(int northPt, int southPt)
 		SBorder.Location[SOUTH] = northPt;
 		Border = Borders[SOUTH].remove(&SBorder);
 		delete(Border);
+		AllowedBorders++;
 		return SUCCESS;
 	}
 	//else
