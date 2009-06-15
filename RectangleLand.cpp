@@ -174,14 +174,18 @@ StatusType RectangleLand::AddNeighborhood(Shore side, int location, int populati
 	if ( (location < 0) || (population <= 0) ) {
 		return INVALID_INPUT;
 	}
-	Town tmp(location);
-	Town* T = Shores[side].find(&tmp);
-	if (T == NULL) {
-		return FAILURE;
-	}
-	if (T->AddNeighborhood(population) == T->TownSuccess) {
-		return SUCCESS;
-	}
+	try{
+		Town tmp(location);
+		Town* T = Shores[side].find(&tmp);
+		if (T == NULL) {
+			return FAILURE;
+		}
+		if (T->AddNeighborhood(population) == T->TownSuccess) {
+			return SUCCESS;
+		}
+	} catch (std::bad_alloc&)	{
+	
+		}
 	return FAILURE;
 }
 
@@ -189,43 +193,59 @@ StatusType RectangleLand::AddManyNeighborhoods(Shore side, int location, int siz
 	if ( (size <= 0) || (location < 0) || (populations == NULL) ) {
 		return INVALID_INPUT;
 	}
-	Town tmp(location);
-	Town* T = Shores[side].find(&tmp);
-	if (T == NULL) {
-		return FAILURE;
+	try {
+		Town tmp(location);
+		Town* T = Shores[side].find(&tmp);
+		if (T == NULL) {
+			return FAILURE;
+		}
+		if (T->AddManyNeighborhoods(size, populations) == T->TownFailure) {
+			return FAILURE;
+		}
+		return SUCCESS;
+	} catch (std::bad_alloc&)	{
+	
 	}
-	if (T->AddManyNeighborhoods(size, populations) == T->TownFailure) {
-		return FAILURE;
-	}
-	return SUCCESS;
+	return FAILURE;
 }
 
 StatusType RectangleLand::MonsterAttack(Shore side, int location, int* population) {
 	if ( (location < 0) || (population == NULL) ) {
 		return INVALID_INPUT;
 	}
-	Town tmp(location);
-	Town* T = Shores[side].find(&tmp);
-	if (T == NULL) {
-		return FAILURE;
+	try {
+		Town tmp(location);
+		Town* T = Shores[side].find(&tmp);
+		if (T == NULL) {
+			return FAILURE;
+		}
+		if (T->MonsterAttack(population) == T->TownFailure) {
+			return FAILURE;
+		}
+		return SUCCESS;
+	} catch (std::bad_alloc&)	{
+	
 	}
-	if (T->MonsterAttack(population) == T->TownFailure) {
-		return FAILURE;
-	}
-	return SUCCESS;
+	return FAILURE;
 }
 
 StatusType RectangleLand::ChangeMa(int ma) {
 	if (ma <= 0) {
 		return INVALID_INPUT;
 	}
-	MaChanger M(ma);
-	this->ma = ma;
-	Shores[NORTH].inorder(&M);
-	Shores[SOUTH].inorder(&M);
-	return SUCCESS;
+	try {
+		MaChanger M(ma);
+		this->ma = ma;
+		Shores[NORTH].inorder(&M);
+		Shores[SOUTH].inorder(&M);
+		return SUCCESS;
+	} catch (std::bad_alloc&)	{
+	
+	}
+	return FAILURE;
 }
 
+// Ma changer method for inorder
 bool RectangleLand::MaChanger::DoWork(Town* T) {
 	T->ChangeMa(ma);
 	return false;
