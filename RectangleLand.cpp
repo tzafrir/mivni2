@@ -198,6 +198,16 @@ StatusType RectangleLand::AddManyNeighborhoods(Shore side, int location, int siz
 	if ( (size <= 0) || (location < 0) || (populations == NULL) ) {
 		return INVALID_INPUT;
 	}
+
+	for (int i = 0; i < size; i++)
+	{
+		if (populations[i] <= 0)
+		{
+			return FAILURE;
+		}
+
+	}
+
 	try {
 		Town tmp(location);
 		Town* T = Shores[side].find(&tmp);
