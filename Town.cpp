@@ -54,7 +54,8 @@ Town::TownResult Town::AddManyNeighborhoods(int size, const int* populations) {
 	NeighborhoodsTop->reset();
 	
 	if (Neighborhoods + size <= ma) {
-		if (NeighborhoodsBottom->makeHeap(tmp, Neighborhoods+size) == NeighborhoodsBottom->Failure) {
+		if (NeighborhoodsBottom->makeHeap(tmp, Neighborhoods+size) ==
+				NeighborhoodsBottom->Failure) {
 			delete[] tmp;
 			return TownFailure;
 		}
