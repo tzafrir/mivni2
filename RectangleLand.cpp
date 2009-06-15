@@ -27,8 +27,10 @@ StatusType  RectangleLand::AddTown(Shore side, int location, int maxNeighborhood
 			{
 				
 				T =  new Town(location,maxNeighborhoods,ma);
-				if (Shores[index].insert(T) == Shores[index].Success)
+				if (Shores[index].insert(T) == Shores[index].Success) {
 					return SUCCESS;
+				}
+				delete T;
 			}
 		}
 		catch (std::bad_alloc&)

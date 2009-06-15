@@ -5,7 +5,7 @@
 #define SHORE rand() % 2
 #define __ << " " <<
 #define HOWMANY 1 + rand() % 50
-#define LENGTH 2000
+#define LENGTH 1000
 
 using namespace std;
 
