@@ -93,7 +93,9 @@ Town::TownResult Town::MonsterAttack(int* population) {
 		if (NeighborhoodsTop->findMax(&tmp) == NeighborhoodsTop->Failure) {
 			return TownFailure;
 		}
-		NeighborhoodsBottom->heap_array()[0] = tmp * -1; // Hack
+		NeighborhoodsBottom->heap_array()[0] = tmp * -1; // Hack - equivalent to
+														 // removing and readding
+														 // tmp to the heap
 		NeighborhoodsTop->delMax();
 	}
 	Neighborhoods--;
