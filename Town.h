@@ -15,8 +15,7 @@ class Town {
 	heap* NeighborhoodsBottom;
 	heap* NeighborhoodsTop;
 public:
-	Town(int RLocation) : NeighborhoodsBottom(NULL), NeighborhoodsTop(NULL)
-	,Location(RLocation) {}
+
 
 	Town(int RLocation,int maxNeighborhoods, int ma)  : 
 		maxNeighborhoods(maxNeighborhoods), ma(ma), Location(RLocation), Neighborhoods(0) {
