@@ -136,7 +136,8 @@ Town::TownResult Town::ChangeMa(int ma) {
 
 	if (Neighborhoods > ma) {
 		delete NeighborhoodsTop;
-		NeighborhoodsTop = new heap(Neighborhoods - ma);
+		NeighborhoodsTop = new heap(maxNeighborhoods - ma); // maxNeighborhoods >= Neighborhoods,
+															// so this will not fail
 		if (NeighborhoodsTop->makeHeap(&tmp[ma], Neighborhoods - ma)
 				== NeighborhoodsTop->Failure) {
 			delete[] tmp;
