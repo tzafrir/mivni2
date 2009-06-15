@@ -10,24 +10,21 @@ using std::cout;
 class Select {
 	int partition(int* A, int first, int last, int x) {
 		int* tmp = new int[last - first + 1];
-		int xi = -1;
 		int j=0;
 		for (int i = first; i <= last; i++) {
 			if (A[i] < x) {
 				tmp[j] = A[i];
 				j++;
 			}
-			if ((A[i] == x) && (xi > 0)) {
-				xi = i;
-			}
 		}
+		int xi = j; // First cell with x
 		for (int i = first; i <= last; i++) {
 			if (A[i] == x) {
 				tmp[j] = x;
 				j++;
 			}
 		}
-		xi = j + first - 1;
+		xi = ((xi + j) / 2 ) + first; // Middle cell with x
 		for (int i = first; i <= last; i++) {
 			if (A[i] > x) {
 				tmp[j] = A[i];
@@ -96,6 +93,8 @@ class Select {
 		int x = median_of_medians(A, first, last);
 		//cout << "pivot = " << x << "\n";
 		int s = partition(A, first, last, x);
+		
+		
 		if ((s - first) >= i) {
 			return select(A, first, s-1, i);
 		}
