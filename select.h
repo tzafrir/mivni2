@@ -44,13 +44,14 @@ class Select {
 	public:
 	static void select(int* A, int first, int last, int index) 
 	{
-		int pivot = last;
-		if (last -first <= 5)
+		int pivot;
+		if (last - first <= 9)
 		{
 			if (first == last)
 			{
 				return;
 			}
+			pivot = last;
 		}
 		else
 		{
@@ -60,6 +61,7 @@ class Select {
 				select(A,i,i+4,3);
 				swap(A[i+2],A[medians++]);
 			}
+
 			pivot = (medians - first) /2;
 
 			select(A,first,medians-1,pivot);
