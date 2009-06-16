@@ -8,103 +8,98 @@
 using std::cout;
 
 class Select {
-	int partition(int* A, int first, int last, int x) {
-		int* tmp = new int[last - first + 1];
-		int j=0;
-		for (int i = first; i <= last; i++) {
-			if (A[i] < x) {
-				tmp[j] = A[i];
-				j++;
+	//A must have more then two element
+	static int partition(int* A, int first, int last, int index) 
+	{
+		swap(A[first],A[index]);
+		int* Smaller=A+first;
+		int* Larger=A+last+1;
+
+		while (true)
+		{
+			while (*(--Larger) > A[first] && Larger > Smaller);
+		
+			while (*(++Smaller) < A[first] && Larger > Smaller);
+
+			if (Larger > Smaller)
+			{
+				swap(*Larger,*Smaller);
 			}
-		}
-		int xi = j; // First cell with x
-		for (int i = first; i <= last; i++) {
-			if (A[i] == x) {
-				tmp[j] = x;
-				j++;
+			else
+			{
+				break;
 			}
-		}
-		xi = ((xi + j) / 2 ) + first; // Middle cell with x
-		for (int i = first; i <= last; i++) {
-			if (A[i] > x) {
-				tmp[j] = A[i];
-				j++;
-			}
-		}
-		for (int i=0; i <= last-first; i++) {
-			A[first+i] = tmp[i];
-		}
-		delete[] tmp;
-		return xi;
+		} 
+
+		swap(A[first],*Larger);
+		return Larger-A;
 	}
-	void swap(int* a, int* b) {
-		int tmp = *a;
-		*a = *b;
-		*b = tmp;
+
+	static inline void swap(int& a, int& b) {
+		int tmp = a;
+		a = b;
+		b = tmp;
 	}
-	int median_of_5(int* A){
-		int tmp[5] = {A[0], A[1], A[2], A[3], A[4]};
+
+	static void median_of_5(int* A)
+	{
 		for (int j=4;j >=2;j--) {
 			int maxtmp = 0;
 			for (int i=1; i<=j; i++) {
-				if (tmp[i] > tmp[maxtmp]) {
+				if (A[i] > A[maxtmp]) {
 					maxtmp = i;
 				}
 			}
-			swap(&tmp[j], &tmp[maxtmp]); 
+			swap(A[j], A[maxtmp]); 
 		}
-		return tmp[2];
 	}
-	int median_of_medians(int* A, int first, int last) {
-		int size = (last - first + 1);
-		int* medians;
-		int medians_size;
-		if (size % 5 != 0) {
-			medians_size = (size / 5) + 1;
-			medians = new int[medians_size];
-			for (int i=0; i < medians_size - 1; i++) {
-				medians[i] = median_of_5(&A[first + i*5]);
-			}
-			medians[medians_size - 1] = A[last]; // Arbitrary member for last group
-		} else {
-			medians_size = size / 5;
-			medians = new int[medians_size];
-			for (int i=0; i < medians_size ; i++) {
-				medians[i] = median_of_5(&A[first + i*5]);
-			}
-		}
-		int x;
-		if (medians_size == 5) {
-			x = median_of_5(medians);
-		} else if (medians_size < 5) {
-			x = medians[0]; // arbitrary return value; TODO maybe important to find real median
-		} else {
-			x = select(medians, 0, medians_size-1, medians_size / 2);
-		}
-		delete[] medians;
-		return x;
-	}
+
+	
 	public:
-	int select(int* A, int first, int last, int i) {
-		//cout << "Searching for " << i << " between " << first << " and " << last << "\n";
-		if (first == last) {
-			return A[first];
+	static void select(int* A, int first, int last, int index) 
+	{
+		if (first == last)
+		{
+			return;
 		}
-		int x = median_of_medians(A, first, last);
-		//cout << "pivot = " << x << "\n";
-		int s = partition(A, first, last, x);
+
+		int* medians= A+ first;
+		for (int* ptr = medians; ptr <= A + last- 4;
+				medians++, ptr+=5)
+		{
+			median_of_5(ptr);
+			swap(*(ptr+2),*medians);
+		}
+
+		int mediansNum = medians-(A+first);
 		
-		
-		if ((s - first) >= i) {
-			return select(A, first, s-1, i);
+		int pivot = last;
+		if (mediansNum > 1)
+		{
+			pivot = (mediansNum - first) /2;
+			select(A,first,mediansNum-1,pivot);
 		}
-		if ((s - first) == 0) { // TODO: private case, or can be generalized?
-			if (i == 1) {
-				return A[first];
-			}
-			return select(A, first+1, last, i-1);
+
+		pivot = partition(A,first,last,pivot);
+
+		if (index-1 < pivot)
+		{
+			select(A,first,pivot-1,index);
+			
 		}
-		return select(A, s, last, i - (s - first) );
+		else
+		{
+			select(A,pivot,last,index);	
+		}
+		/*
+		std::cout << std::endl << index - first << std::endl;
+		for (int i = first; i <= last; i++)
+		{
+			std::cout << A[i] << ',' ;
+		}
+		std::cout << std::endl << pivot << std::endl;
+		*/
 	}
+		
 };
 #endif // _SELECT_H
