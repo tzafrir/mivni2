@@ -40,46 +40,31 @@ class Select {
 		a = b;
 		b = tmp;
 	}
-
-	static void median_of_5(int* A)
-	{
-		for (int j=4;j >=2;j--) {
-			int maxtmp = 0;
-			for (int i=1; i<=j; i++) {
-				if (A[i] > A[maxtmp]) {
-					maxtmp = i;
-				}
-			}
-			swap(A[j], A[maxtmp]); 
-		}
-	}
-
 	
 	public:
 	static void select(int* A, int first, int last, int index) 
 	{
-		if (first == last)
-		{
-			return;
-		}
-
-		int* medians= A+ first;
-		for (int* ptr = medians; ptr <= A + last- 4;
-				medians++, ptr+=5)
-		{
-			median_of_5(ptr);
-			swap(*(ptr+2),*medians);
-		}
-
-		int mediansNum = medians-(A+first);
-		
 		int pivot = last;
-		if (mediansNum > 1)
+		if (last -first <= 5)
 		{
-			pivot = (mediansNum - first) /2;
-			select(A,first,mediansNum-1,pivot);
+			if (first == last)
+			{
+				return;
+			}
 		}
+		else
+		{
+			int medians= first;
+			for (int i = medians; i <= last- 4;	medians++, i+=5)
+			{
+				select(A,i,i+4,3);
+				swap(A[i+2],A[medians++]);
+			}
+			pivot = (medians - first) /2;
 
+			select(A,first,medians-1,pivot);
+		}
+		
 		pivot = partition(A,first,last,pivot);
 
 		if (index-1 < pivot)
