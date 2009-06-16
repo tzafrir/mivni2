@@ -1,15 +1,5 @@
 #include "heap.h"
 
-heap::heap(int max) {
-		this->max = max;
-		num_items = 0;
-		tree = new int[max];
-	}
-heap::~heap(){
-	delete[] tree;
-}
-
-
 int heap::father(int n) {
 	return (((n+1) / 2) - 1);
 }
@@ -60,21 +50,6 @@ void heap::postOrderSiftDown(int n) {
 	postOrderSiftDown(left(n));
 	postOrderSiftDown(right(n));
 	siftDown(n);
-}
-
-heap::heapResult heap::makeHeap(const int* const input_array, int size) {
-	if (size > max) {
-		return Failure;
-	}
-	if (num_items != 0) { // Can't makeHeap on a non-empty heap
-		return Failure;
-	}
-	for (int i=0; i < size; i++) {
-		tree[i] = input_array[i];
-	}
-	num_items = size;
-	postOrderSiftDown(0);
-	return Success;
 }
 
 heap::heapResult heap::insert(int new_item) {

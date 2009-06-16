@@ -111,7 +111,8 @@ StatusType RectangleLand::AddBorder(int northPt, int southPt)
 		//make sure there isnt any tonw in those locations
 		Town northTown(northPt);
 		Town southTown(southPt);
-		if (Shores[NORTH].find(&northTown) != NULL || Shores[SOUTH].find(&southTown) != NULL)
+		if (Shores[NORTH].find(&northTown) != NULL || Shores[SOUTH].find(&southTown) != NULL
+			|| AllowedBorders == 0 )
 		{
 			return FAILURE;
 		}
@@ -203,7 +204,7 @@ StatusType RectangleLand::AddManyNeighborhoods(Shore side, int location, int siz
 	{
 		if (populations[i] <= 0)
 		{
-			return FAILURE;
+			return INVALID_INPUT;
 		}
 
 	}

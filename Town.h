@@ -12,20 +12,20 @@
 class Town {
 	int maxNeighborhoods;
 	int ma;
-	heap* NeighborhoodsBottom;
-	heap* NeighborhoodsTop;
+	int* Townpopulation;
+	heap NeighborhoodsBottom;
+	heap NeighborhoodsTop;
 public:
-	Town(int RLocation) : NeighborhoodsBottom(NULL), NeighborhoodsTop(NULL)
-	,Location(RLocation) {}
+	Town(int RLocation) : Townpopulation(NULL), Location(RLocation) {}
 
 	Town(int RLocation,int maxNeighborhoods, int ma)  : 
 		maxNeighborhoods(maxNeighborhoods), ma(ma), Location(RLocation), Neighborhoods(0) {
-			NeighborhoodsBottom = new heap(ma);
-			NeighborhoodsTop = new heap(maxNeighborhoods);
+			Townpopulation = new int[maxNeighborhoods];
+			BuildHeaps();
 	}
+
 	~Town(){
-		delete NeighborhoodsBottom;
-		delete NeighborhoodsTop;
+		delete[] Townpopulation;
 	}
 	int Location;
 	int Neighborhoods;
@@ -47,6 +47,7 @@ public:
 	TownResult ChangeMa(int ma);
 private:
 	Town (const Town&);
+	void BuildHeaps();
 };
 
 #endif

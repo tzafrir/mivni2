@@ -21,13 +21,13 @@ private:
 	void postOrderSiftDown(int n);
 	
 public:
-	heap(int max);
-	~heap();
+	heap() : tree(NULL), max(0),num_items(0) { }
+	heap(int items, int* Array ,int heapmax) : tree(Array), max(heapmax),
+		num_items(items) { postOrderSiftDown(0); }
 	enum heapResult{
 		Success,
 		Failure
 	};
-	heapResult makeHeap(const int* const input_array, int size);
 	heapResult insert(int new_item);
 	void delMax();
 	heapResult findMax(int* output);
