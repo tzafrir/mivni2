@@ -11,10 +11,10 @@ class Select {
 public:
 	//use 3-way partition, becuse we have similiar items, and we dont
 	//wont to waste the good pivot chosne by median of medians
-	static int partition(int* A, int Size, int index) 
+	static void partition(int* A, int first, int Last, int index, int& p_Left,int& p_Right) 
 	{
 		
-		int i = 0, k = 0, p = Size-1;
+		int i = first, k = first, p = Last;
 		swap(A[index],A[p]);
 		int pivot = A[p];
 
@@ -34,22 +34,19 @@ public:
 			}
 		}
 
-		//now A[0..k-1] smaller then pivot ,A[k..p-1] larger then pivot
-		//A[p..Size-1] are all pivots
+		//now (A+first)[0..k-1] smaller then pivot ,(A+first)[k..p-1] larger then pivot
+		//(A+first)[p..Size-1] are all pivots
 
 
-		i = Size;
-		index = k + (Size - p) / 2; //(Size - p) is the number of medians
-									//we divide by 2 and add the index
-									//of the first pivot after partitioning
-									//this way if we get a good pivot
-									//we advance even if must of the items are pivots
-		for (; k < p; k++)
+		i = Last;
+		p_Left = k;
+		
+		for (; k < p; k++,i--)
 		{
-			swap(A[k],A[--i]);
+			swap(A[k],A[i]);
 		}
-		return index;
 
+		p_Right = i;
 	}
 
 	static void select(int* A,int Size, int index) 
@@ -57,6 +54,7 @@ public:
 		index--; //its we work with indexes 0-size-1 the index'th item in in positon 
 		//index -1
 		int last=Size-1, first=0;
+		int p_Left,p_Right;
 
 		while (true)
 		{
@@ -88,25 +86,22 @@ public:
 				select(&A[first],medians,pivot);
 			}
 			
-			pivot = partition(A,Size,pivot);
+			partition(A,first,last,pivot,p_Left,p_Right);
 
 
-			if (index < pivot)
+			if (index < p_Left)
 			{
-				return;
-				last = pivot-1;
+				last = p_Left-1;
+			}
+			else if (index > p_Right)
+			{
+				first = p_Right+1;
 			}
 			else
 			{
-				if (index == pivot) 
-				{
-					return;
-				}
-
-				first = pivot+1;
-				return;
+				return; //one of the pivots of last partition is in the 
+						//requested position
 			}
-			
 		}
 	}
 
