@@ -8,53 +8,49 @@
 using std::cout;
 
 class Select {
-	//A must have more then two element
+public:
+	//use 3-way partition, becuse we have similiar items, and we dont
+	//wont to waste the good pivot chosne by median of medians
 	static int partition(int* A, int Size, int index) 
 	{
-		int pivot = A[index];
 		
-		int* Smaller=A;
+		int i = 0, k = 0, p = Size-1;
+		swap(A[index],A[p]);
+		int pivot = A[p];
 
-		while (*(Smaller) < pivot) Smaller++; //will stop at pivot in worst case
-		swap(*Smaller,A[index]);
-
-		index = Smaller - A;
-		if (index == Size-1)
+		while (i < p)
 		{
-			return index;
+			if (A[i] < pivot)
+			{
+				swap(A[i++],A[k++]);
+			}
+			else if (A[i] == pivot)
+			{
+				swap (A[i],A[--p]);
+			}
+			else 
+			{
+				i++;
+			}
 		}
 
-		int* Larger=A+Size;
+		//now A[0..k-1] smaller then pivot ,A[k..p-1] larger then pivot
+		//A[p..Size-1] are all pivots
 
-		while (true)
+
+		i = Size;
+		index = k + (Size - p) / 2; //(Size - p) is the number of medians
+									//we divide by 2 and add the index
+									//of the first pivot after partitioning
+									//this way if we get a good pivot
+									//we advance even if must of the items are pivots
+		for (; k < p; k++)
 		{
-			while (*(--Larger) > pivot); //we know the loop will stop in
-									    //A[index] in the worsk case
-		
-			while (*(++Smaller) < pivot);  //we know the loop will stop in
-									    //becuse we placed a >= item in A[index] in the
-										//the begging
-			if (Larger > Smaller)
-			{
-				swap(*Larger,*Smaller);
-			}
-			else
-			{
-				break;
-			}
-		} 
+			swap(A[k],A[--i]);
+		}
+		return index;
 
-		swap(A[index],*Larger);
-		return Larger-A;
 	}
-
-	static inline void swap(int& a, int& b) {
-		int tmp = a;
-		a = b;
-		b = tmp;
-	}
-	
-	public:
 
 	static void select(int* A,int Size, int index) 
 	{
@@ -78,6 +74,8 @@ class Select {
 			}
 			else
 			{
+				//use median of medians to select good pivot and
+				//garuntee O(n)
 				int medians= first;
 				for (int i = medians; i <= last- 4;	medians++, i+=5)
 				{
@@ -111,6 +109,13 @@ class Select {
 			
 		}
 	}
+
+	static inline void swap(int& a, int& b) {
+		int tmp = a;
+		a = b;
+		b = tmp;
+	}
+
 		
 };
 #endif // _SELECT_H
