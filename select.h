@@ -2,115 +2,109 @@
 #define _SELECT_H
 
 #include <stdlib.h>
+#include <time.h>
 #include <iostream>
-#include <cassert>
 
 using std::cout;
 
 class Select {
-public:
-	//use 3-way partition, becuse we have similiar items, and we dont
-	//wont to waste the good pivot chosne by median of medians
-	static void partition(int* A, int first, int Last, int index, int& p_Left,int& p_Right) 
-	{
-		
-		int i = first, k = first, p = Last;
-		swap(A[index],A[p]);
-		int pivot = A[p];
-
-		while (i < p)
-		{
-			if (A[i] < pivot)
-			{
-				swap(A[i++],A[k++]);
-			}
-			else if (A[i] == pivot)
-			{
-				swap (A[i],A[--p]);
-			}
-			else 
-			{
-				i++;
+	static int partition(int* A, int first, int last, int x) {
+		int* tmp = new int[last - first + 1];
+		int j=0;
+		for (int i = first; i <= last; i++) {
+			if (A[i] < x) {
+				tmp[j] = A[i];
+				j++;
 			}
 		}
-
-		//now (A+first)[0..k-1] smaller then pivot ,(A+first)[k..p-1] larger then pivot
-		//(A+first)[p..Size-1] are all pivots
-
-
-		i = Last;
-		p_Left = k;
-		
-		for (; k < p; k++,i--)
-		{
-			swap(A[k],A[i]);
+		int xi = j; // First cell with x
+		for (int i = first; i <= last; i++) {
+			if (A[i] == x) {
+				tmp[j] = x;
+				j++;
+			}
 		}
-
-		p_Right = i;
+		xi = ((xi + j) / 2 ) + first; // Middle cell with x
+		for (int i = first; i <= last; i++) {
+			if (A[i] > x) {
+				tmp[j] = A[i];
+				j++;
+			}
+		}
+		for (int i=0; i <= last-first; i++) {
+			A[first+i] = tmp[i];
+		}
+		delete[] tmp;
+		return xi;
 	}
-
-	static void select(int* A,int Size, int index) 
-	{
-		index--; //its we work with indexes 0-size-1 the index'th item in in positon 
-		//index -1
-		int last=Size-1, first=0;
-		int p_Left,p_Right;
-
-		while (true)
-		{
-			assert(first <= last);
-			
-			int pivot;
-			if (last - first < 15) //median of medians isnt useful if we have 
-				//less then 3 groups of five...
-			{
-				if (first == last)
-				{
-					return;
+	static void swap(int* a, int* b) {
+		int tmp = *a;
+		*a = *b;
+		*b = tmp;
+	}
+	static int median_of_5(int* A){
+		int tmp[5] = {A[0], A[1], A[2], A[3], A[4]};
+		for (int j=4;j >=2;j--) {
+			int maxtmp = 0;
+			for (int i=1; i<=j; i++) {
+				if (tmp[i] > tmp[maxtmp]) {
+					maxtmp = i;
 				}
-				pivot = last;
 			}
-			else
-			{
-				//use median of medians to select good pivot and
-				//garuntee O(n)
-				int medians= first;
-				for (int i = medians; i <= last- 4;	medians++, i+=5)
-				{
-					select(&A[i],5,3);
-					swap(A[i+2],A[medians++]);
-				}
-
-				pivot = (medians - first) /2;
-
-				select(&A[first],medians,pivot);
+			swap(&tmp[j], &tmp[maxtmp]); 
+		}
+		return tmp[2];
+	}
+	static int median_of_medians(int* A, int first, int last) {
+		int size = (last - first + 1);
+		int* medians;
+		int medians_size;
+		if (size % 5 != 0) {
+			medians_size = (size / 5) + 1;
+			medians = new int[medians_size];
+			for (int i=0; i < medians_size - 1; i++) {
+				medians[i] = median_of_5(&A[first + i*5]);
 			}
-			
-			partition(A,first,last,pivot,p_Left,p_Right);
-
-
-			if (index < p_Left)
-			{
-				last = p_Left-1;
-			}
-			else if (index > p_Right)
-			{
-				first = p_Right+1;
-			}
-			else
-			{
-				return; //one of the pivots of last partition is in the 
-						//requested position
+			medians[medians_size - 1] = A[last]; // Arbitrary member for last group
+		} else {
+			medians_size = size / 5;
+			medians = new int[medians_size];
+			for (int i=0; i < medians_size ; i++) {
+				medians[i] = median_of_5(&A[first + i*5]);
 			}
 		}
+		int x;
+		if (medians_size == 5) {
+			x = median_of_5(medians);
+		} else if (medians_size < 5) {
+			x = medians[0]; // arbitrary return value; TODO maybe important to find real median
+		} else {
+			x = select(medians, 0, medians_size-1, medians_size / 2);
+		}
+		delete[] medians;
+		return x;
 	}
-
-	static inline void swap(int& a, int& b) {
-		int tmp = a;
-		a = b;
-		b = tmp;
-	}
-
+	public:
+	static int select(int* A, int first, int last, int i) {
+		//cout << "Searching for " << i << " between " << first << " and " << last << "\n";
+		if (first == last) {
+			return A[first];
+		}
+		int x = median_of_medians(A, first, last);
+		//cout << "pivot = " << x << "\n";
+		int s = partition(A, first, last, x);
 		
+		
+		if ((s - first) >= i) {
+			return select(A, first, s-1, i);
+		}
+		if ((s - first) == 0) { // TODO: private case, or can be generalized?
+			if (i == 1) {
+				return A[first];
+			}
+			return select(A, first+1, last, i-1);
+		}
+		return select(A, s, last, i - (s - first) );
+	}
 };
 #endif // _SELECT_H

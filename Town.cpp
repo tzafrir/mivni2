@@ -99,8 +99,8 @@ void Town::BuildHeaps()
 	{
 		if (Neighborhoods  > ma)
 		{
-			Select::select(Townpopulation, Neighborhoods, ma); // Side effect puts ma element in tmp[ma-1]
-
+			Select::select(Townpopulation,0, Neighborhoods -1, ma); // Side effect puts ma element in tmp[ma-1]
+		
 			for (int i = ma; i < Neighborhoods; i++)
 			{
 				Townpopulation[i] *= -1; 
