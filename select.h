@@ -9,31 +9,18 @@ using std::cout;
 
 class Select {
 	//A must have more then two element
-	static int partition(int* A, int Size, int index) 
+	static int partition(int* A, int first, int last, int index) 
 	{
-		int pivot = A[index];
-		
-		int* Smaller=A;
-
-		while (*(Smaller) < pivot) Smaller++; //will stop at pivot in worst case
-		swap(*Smaller,A[index]);
-
-		index = Smaller - A;
-		if (index == Size-1)
-		{
-			return index;
-		}
-
-		int* Larger=A+Size;
+		swap(A[first],A[index]);
+		int* Smaller=A+first;
+		int* Larger=A+last+1;
 
 		while (true)
 		{
-			while (*(--Larger) > pivot); //we know the loop will stop in
-									    //A[index] in the worsk case
+			while (*(--Larger) > A[first] && Larger > Smaller);
 		
-			while (*(++Smaller) < pivot);  //we know the loop will stop in
-									    //becuse we placed a >= item in A[index] in the
-										//the begging
+			while (*(++Smaller) < A[first] && Larger > Smaller);
+
 			if (Larger > Smaller)
 			{
 				swap(*Larger,*Smaller);
@@ -44,9 +31,10 @@ class Select {
 			}
 		} 
 
-		swap(A[index],*Larger);
+		swap(A[first],*Larger);
 		return Larger-A;
 	}
+		
 
 	static inline void swap(int& a, int& b) {
 		int tmp = a;
@@ -91,7 +79,7 @@ class Select {
 				pivot = first + pivot -1;
 			}
 			
-			pivot = first + partition(&A[first],Size,pivot-first);
+			pivot = partition(A,first,last,pivot);
 
 
 			if (index < pivot)
