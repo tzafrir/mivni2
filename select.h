@@ -2,109 +2,115 @@
 #define _SELECT_H
 
 #include <stdlib.h>
-#include <time.h>
 #include <iostream>
+#include <cassert>
 
 using std::cout;
 
 class Select {
-	static int partition(int* A, int first, int last, int x) {
-		int* tmp = new int[last - first + 1];
-		int j=0;
-		for (int i = first; i <= last; i++) {
-			if (A[i] < x) {
-				tmp[j] = A[i];
-				j++;
+	//A must have more then two element
+	static int partition(int* A, int Size, int index) 
+	{
+		int pivot = A[index];
+		
+		int* Smaller=A;
+
+		while (*(Smaller) < pivot) Smaller++; //will stop at pivot in worst case
+		swap(*Smaller,A[index]);
+
+		index = Smaller - A;
+		if (index == Size-1)
+		{
+			return index;
+		}
+
+		int* Larger=A+Size;
+
+		while (true)
+		{
+			while (*(--Larger) > pivot); //we know the loop will stop in
+									    //A[index] in the worsk case
+		
+			while (*(++Smaller) < pivot);  //we know the loop will stop in
+									    //becuse we placed a >= item in A[index] in the
+										//the begging
+			if (Larger > Smaller)
+			{
+				swap(*Larger,*Smaller);
 			}
-		}
-		int xi = j; // First cell with x
-		for (int i = first; i <= last; i++) {
-			if (A[i] == x) {
-				tmp[j] = x;
-				j++;
+			else
+			{
+				break;
 			}
-		}
-		xi = ((xi + j) / 2 ) + first; // Middle cell with x
-		for (int i = first; i <= last; i++) {
-			if (A[i] > x) {
-				tmp[j] = A[i];
-				j++;
-			}
-		}
-		for (int i=0; i <= last-first; i++) {
-			A[first+i] = tmp[i];
-		}
-		delete[] tmp;
-		return xi;
+		} 
+
+		swap(A[index],*Larger);
+		return Larger-A;
 	}
-	static void swap(int* a, int* b) {
-		int tmp = *a;
-		*a = *b;
-		*b = tmp;
+
+	static inline void swap(int& a, int& b) {
+		int tmp = a;
+		a = b;
+		b = tmp;
 	}
-	static int median_of_5(int* A){
-		int tmp[5] = {A[0], A[1], A[2], A[3], A[4]};
-		for (int j=4;j >=2;j--) {
-			int maxtmp = 0;
-			for (int i=1; i<=j; i++) {
-				if (tmp[i] > tmp[maxtmp]) {
-					maxtmp = i;
-				}
-			}
-			swap(&tmp[j], &tmp[maxtmp]); 
-		}
-		return tmp[2];
-	}
-	static int median_of_medians(int* A, int first, int last) {
-		int size = (last - first + 1);
-		int* medians;
-		int medians_size;
-		if (size % 5 != 0) {
-			medians_size = (size / 5) + 1;
-			medians = new int[medians_size];
-			for (int i=0; i < medians_size - 1; i++) {
-				medians[i] = median_of_5(&A[first + i*5]);
-			}
-			medians[medians_size - 1] = A[last]; // Arbitrary member for last group
-		} else {
-			medians_size = size / 5;
-			medians = new int[medians_size];
-			for (int i=0; i < medians_size ; i++) {
-				medians[i] = median_of_5(&A[first + i*5]);
-			}
-		}
-		int x;
-		if (medians_size == 5) {
-			x = median_of_5(medians);
-		} else if (medians_size < 5) {
-			x = medians[0]; // arbitrary return value; TODO maybe important to find real median
-		} else {
-			x = select(medians, 0, medians_size-1, medians_size / 2);
-		}
-		delete[] medians;
-		return x;
-	}
+	
 	public:
-	static int select(int* A, int first, int last, int i) {
-		//cout << "Searching for " << i << " between " << first << " and " << last << "\n";
-		if (first == last) {
-			return A[first];
-		}
-		int x = median_of_medians(A, first, last);
-		//cout << "pivot = " << x << "\n";
-		int s = partition(A, first, last, x);
-		
-		
-		if ((s - first) >= i) {
-			return select(A, first, s-1, i);
-		}
-		if ((s - first) == 0) { // TODO: private case, or can be generalized?
-			if (i == 1) {
-				return A[first];
+
+	static void select(int* A,int Size, int index) 
+	{
+		index--; //if we work with indexes 0-size-1 the index'th item in in positon 
+		//index -1
+		int last=Size-1, first=0;
+
+		while (true)
+		{
+			assert(Size >= 0);
+			
+			int pivot;
+			if (Size < 15) //median of medians isnt useful if we have 
+				//less then 3 groups of five...
+			{
+				if (first == last)
+				{
+					return;
+				}
+				pivot = last;
 			}
-			return select(A, first+1, last, i-1);
+			else
+			{
+				int medians= first;
+				for (int i = medians; i <= last- 4;	medians++, i+=5)
+				{
+					select(&A[i],5,3);
+					swap(A[i+2],A[medians]);
+				}
+
+				pivot = (medians - first) /2;
+
+				select(&A[first],medians - first ,pivot);
+				pivot = first + pivot -1;
+			}
+			
+			pivot = first + partition(&A[first],Size,pivot-first);
+
+
+			if (index < pivot)
+			{
+				last = pivot-1;
+			}
+			else
+			{
+				if (index == pivot) 
+				{
+					return;
+				}
+
+				first = pivot+1;
+			}
+			Size = last - first + 1;
+			
 		}
-		return select(A, s, last, i - (s - first) );
 	}
+		
 };
 #endif // _SELECT_H
