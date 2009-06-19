@@ -47,6 +47,7 @@ Town::TownResult Town::AddManyNeighborhoods(int size, const int* populations) {
 		return TownFailure;
 	}
 
+	//resotre plus sign so will be able to work with the real values
 	for (int i = ma; i < Neighborhoods; i++)
 	{
 		Townpopulation[i] *= -1; 
@@ -99,8 +100,14 @@ void Town::BuildHeaps()
 	{
 		if (Neighborhoods  > ma)
 		{
-			Select::select(Townpopulation, Neighborhoods, ma); // Side effect puts ma element in tmp[ma-1]
+			//puts ma element in Townpopulation[ma-1] and
+			//partition the array so all smaller elements ar
+			//before Townpopulation[ma-1] all larger after
+			//and equal to are on both sides
+			Select::select(Townpopulation, Neighborhoods, ma); 
 		
+
+			//restore minus sign to emulate min heap
 			for (int i = ma; i < Neighborhoods; i++)
 			{
 				Townpopulation[i] *= -1; 

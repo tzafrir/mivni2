@@ -60,6 +60,7 @@ class Select {
 			}
 			else
 			{
+				//use median of medians to select good pivot
 				int medians= first;
 				for (int i = medians; i <= last- 4;	medians++, i+=5)
 				{
