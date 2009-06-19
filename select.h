@@ -1,10 +1,6 @@
 #ifndef _SELECT_H
 #define _SELECT_H
 
-#include <stdlib.h>
-#include <iostream>
-#include <cassert>
-
 using std::cout;
 
 class Select {
@@ -51,14 +47,12 @@ class Select {
 		int last=Size-1, first=0;
 
 		while (true)
-		{
-			assert(Size >= 0);
-			
+		{	
 			int pivot;
 			if (Size < 15) //median of medians isnt useful if we have 
 				//less then 3 groups of five...
 			{
-				if (first == last)
+				if (first <= last)
 				{
 					return;
 				}
