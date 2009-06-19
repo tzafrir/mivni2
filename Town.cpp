@@ -30,7 +30,7 @@ Town::TownResult Town::AddNeighborhood(int population) {
 	if (population < tmp)
 	{
 		NeighborhoodsBottom.delMax();
-		NeighborhoodsTop.insert(population);
+		NeighborhoodsBottom.insert(population);
 		population = tmp;
 	}
 														 
