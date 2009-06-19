@@ -32,7 +32,7 @@ class Select {
 		} 
 
 		swap(A[first],*Larger);
-		return Larger-A;
+		return Larger-A + first;
 	}
 		
 
