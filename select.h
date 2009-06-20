@@ -1,7 +1,6 @@
 #ifndef _SELECT_H
 #define _SELECT_H
 
-using std::cout;
 
 class Select {
 	//A must have more then two element
@@ -52,7 +51,7 @@ class Select {
 			if (Size < 15) //median of medians isnt useful if we have 
 				//less then 3 groups of five...
 			{
-				if (first <= last)
+				if (Size <= 1)
 				{
 					return;
 				}
