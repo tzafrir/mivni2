@@ -36,19 +36,6 @@ public:
 	
 	const int _num_items();
 	int* heap_array();
-	
-	void print(int n){ // TODO: remove
-		for (int i=0, j=0, k=1;i<n;i++) {
-			std::cout << tree[i] << " ";
-			j++;
-			if (j==k) {
-				j=0;
-				std::cout << "\n";
-				k *= 2;
-			}
-		}
-		std::cout << "\n\n";
-	}
 };
 
 
