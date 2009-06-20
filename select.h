@@ -1,7 +1,6 @@
 #ifndef _SELECT_H
 #define _SELECT_H
 
-
 class Select {
 	//A must have more then two element
 	static int partition(int* A, int first, int last, int index) 

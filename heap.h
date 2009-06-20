@@ -1,5 +1,6 @@
 #ifndef _HEAP_H
 #define _HEAP_H
+#include <stddef.h>
 
 class heap {
 	int* tree;
