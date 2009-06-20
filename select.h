@@ -1,7 +1,6 @@
 #ifndef _SELECT_H
 #define _SELECT_H
 
-using std::cout;
 
 class Select {
 	//A must have more then two element
