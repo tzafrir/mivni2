@@ -52,7 +52,7 @@ class Select {
 			if (Size < 15) //median of medians isnt useful if we have 
 				//less then 3 groups of five...
 			{
-				if (last <= first)
+				if (Size <= 1)
 				{
 					return;
 				}
