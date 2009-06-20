@@ -1,8 +1,6 @@
 #ifndef _HEAP_H
 #define _HEAP_H
 
-#include <iostream>
-
 class heap {
 	int* tree;
 	int max;
