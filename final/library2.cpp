@@ -1,6 +1,6 @@
 #include "library2.h"
 #include "RectangleLand.h"
-
+#include <new>
 /*
  *
  *	library2.cpp

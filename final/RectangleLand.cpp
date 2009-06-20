@@ -1,5 +1,5 @@
 #include "RectangleLand.h"
-
+#include <new>
 /*
  *
  *	RectangleLand.cpp
