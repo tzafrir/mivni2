@@ -111,8 +111,8 @@ StatusType RectangleLand::AddBorder(int northPt, int southPt)
 		//make sure there isnt any tonw in those locations
 		Town northTown(northPt);
 		Town southTown(southPt);
-		if (Shores[NORTH].find(&northTown) != NULL || Shores[SOUTH].find(&southTown) != NULL
-			|| AllowedBorders == 0 )
+		if (AllowedBorders == 0 || Shores[NORTH].find(&northTown) != NULL
+			|| Shores[SOUTH].find(&southTown) != NULL )
 		{
 			return FAILURE;
 		}
