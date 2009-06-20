@@ -1,6 +1,12 @@
 #include "library2.h"
 #include "RectangleLand.h"
 
+/*
+ *
+ *	library2.cpp
+ *
+ */
+
 void* Init(int ma)
 {
 	if (ma > 0) 

@@ -1,5 +1,11 @@
 #include "heap.h"
 
+/*
+ *
+ *	heap.cpp
+ *
+ */
+
 int heap::father(int n) {
 	return (((n+1) / 2) - 1);
 }

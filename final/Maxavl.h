@@ -6,7 +6,7 @@
  *	Maxavl.h
  *
  */
-#include <iostream>
+#include <cstddef>
 
 template <typename T>
 class MAXAVL{
@@ -34,71 +34,6 @@ public:
 		Destroy(root,FreeItems);
 		root = NULL;
 	}
-/*
-	void print_tree(System::Drawing::Graphics^ G)
-	{
-		int height = Height();
-		if (height == -1)
-		{
-			std::cout << "Tree is Empty";
-		}
-		else
-		{
-			height+= 2;// 1 for the formula in the next line, and another one for the null leafs
-			int Maxnodes = (1 << (height)) -1; //2^ (height) -1
-
-			node** Array = new node*[Maxnodes];
-			node** ptr= Array;
-
-			for (int i=0; i< Maxnodes; i++)
-			{
-				*(ptr++) = NULL; //init array
-			}
-
-			ptr= Array;
-
-			print_tree(root,0,Array); //fill array with tree nodes
-
-			//print array
-			height--; //no need to print all the none in last line
-			float y = 10;
-			
-			for (int i=0; i<height; i++)
-			{
-				
-				float x = (float)( - 25 * (1 << (height-1-i)));
-				y +=50;
-				for (int j = 0; j < 1 << i; j++)
-				{
-					//std::string text;
-					System::String^ text;
-
-					x += 50 * (1 << (height-1-i));
-					
-			
-
-					
-
-					if (*ptr == NULL)
-					{
-						text =  "none";
-					}
-					else
-					{
-					//	int 
-						//_itoa(*(*ptr)->data,temp,10);
-						text = ((*ptr)->data->number).ToString() +"," + ((*ptr)->data->Max).ToString() + "\n(" + ((*ptr)->bf).ToString() + ")" + ((*ptr)->Max).ToString();
-					}
-					
-					G->DrawString(text,gcnew System::Drawing::Font("arial",8),System::Drawing::Brushes::Black,x,y);
-					ptr++;
-				}
-			}
-			delete[] Array;
-			
-		}
-	}
-	*/
 
 
 
@@ -560,17 +495,7 @@ private:
 			delete root;
 		}
 	}
-
-
-	static void print_tree(node* root,int index, node* Array[])
-	{
-		Array[index] = root;
-		if (root != NULL)
-		{
-			print_tree(root->Children[Left],(index +1) * 2 -1,Array);
-			print_tree(root->Children[Right],(index +1) * 2,Array);
-		}
-	}
+
 
 	node* root;
 };
